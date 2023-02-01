@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "npm install --save sequelize && nodemon app.js",
     "test": "mocha --timeout 10000 --exit",
     "build": "npm i mocha email-validator password-validator"
   },
