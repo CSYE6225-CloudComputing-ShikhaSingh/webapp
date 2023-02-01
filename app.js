@@ -28,7 +28,7 @@ app.use(health);
 app.listen({port:3030},async()=>{
     console.log("Server is running at port 3030");
     await sequelize.sync();
-    //await sequelize.authenticate()
+    await sequelize.authenticate()
     console.log("Database is connected")
     
 })
