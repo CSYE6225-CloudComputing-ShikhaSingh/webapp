@@ -5,6 +5,7 @@ const bcrypt= require('bcrypt');
 var auth= require('../auth/auth')
 router.use(express.json());
 
+//Authenticated  Rest api to check health of application
 
 router.put('/user/:userId',async(req,res)=>{
 
