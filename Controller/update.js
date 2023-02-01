@@ -1,4 +1,3 @@
-
 const {sequelize,User} = require('../models')
 const express= require('express');
 const router= express.Router();
@@ -74,7 +73,7 @@ router.put('/user/:userId',async(req,res)=>{
                    
                        try
                        {
-                        if (req.body.username != undefined || req.body.account_updated != undefined || req.body.account_created != undefined) {
+                        if (req.body.account_updated != undefined || req.body.account_created != undefined) {
                             return res.json(
                                 {
                                     status: 400,
