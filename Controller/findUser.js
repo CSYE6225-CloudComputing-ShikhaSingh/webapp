@@ -6,7 +6,7 @@ const bcrypt= require('bcrypt');
 var auth= require('../auth/auth')
 router.use(express.json());
 
-//Authenticated API- get request to retrieve user details
+///Authenticated API- get request to retrieve user details
 
 router.get('/user/:userId',async(req,res)=>{
 
