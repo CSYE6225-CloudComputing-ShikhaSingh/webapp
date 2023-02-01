@@ -41,7 +41,7 @@ router.put('/user/:userId',async(req,res)=>{
                 }
                 else if(result)
                 {
-                    let {first_name,last_name,password,username}= req.body;
+                    let {first_name,last_name,password}= req.body;
                     const firstNameCheck= auth.nameCheck(first_name);
                    if(firstNameCheck.status!=200)
                    {
@@ -52,15 +52,6 @@ router.put('/user/:userId',async(req,res)=>{
                            })
                    }
                       
-                //    const userNameCheck= auth.userNameCheck(username);
-                //    if(userNameCheck.status!=200)
-                //    {
-                //        return res.json(
-                //            {
-                //                status: 400,
-                //                message: userNameCheck.message
-                //            })
-                //    }
                       
                    const passwordCheck= auth.passwordCheck(password);
                    if(passwordCheck.status!=200)
@@ -74,12 +65,13 @@ router.put('/user/:userId',async(req,res)=>{
                    
                        try
                        {
-                        if (req.body.account_updated != undefined || req.body.account_created != undefined) {
+                        if (req.body.account_updated!=undefined || req.body.account_created!=undefined || req.body.username!=undefined) {
                             return res.json(
                                 {
                                     status: 400,
                                     message: "Bad Request"
-                                })                          }
+                                })                        
+                          }
                         let salt =  bcrypt.genSalt(10);
                         let hashPassword =  bcrypt.hashSync(password, parseInt(salt));
                         console.log(hashPassword);
