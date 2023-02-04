@@ -2,7 +2,7 @@
 
 CSYE 6225 - Spring 2023
 
-Welcome to Cloud Computing Course
+Welcome to Cloud Computing Course.
 
 I have created the repository "webapp" and it has two branches "main" and "assignment1"
 
