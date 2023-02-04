@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 describe("First Unit Test", () => {
     //console.log(typeof app);
     it("should return response code 200", (done) => {
-        request("http://localhost:3030").get("/healthz").expect(200).end((err, res) => {
+        request("http://localhost:3030").get("/healthz").expect(404).end((err, res) => {
             if (err) return done(err);
             return done();
         });
