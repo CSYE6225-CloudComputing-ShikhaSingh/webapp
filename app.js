@@ -42,6 +42,7 @@ app.use(addProduct);
 const connectDb= async()=>{
     console.log("checking the database connection")
     try{
+      await sequelize.sync();  
       await sequelize.authenticate();  
       console.log("Database connection established")
     }
@@ -57,7 +58,7 @@ const connectDb= async()=>{
    app.listen(port,()=>{
     console.log(`Server is running at ${port}`);
 
-   })
+   });
 
 })()
 // app.listen({port:3030},async()=>{
