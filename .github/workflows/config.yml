@@ -1,4 +1,4 @@
-name: Node.js build and deployment workflow
+name: Node.js app build and deployment workflow
 
 on:
   pull_request:
