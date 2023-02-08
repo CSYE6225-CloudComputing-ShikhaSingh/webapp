@@ -8,15 +8,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-     DB_HOST: ${{ secrets.DB_HOST }}
-     DB_USER: ${{ secrets.DB_USER }}
-     DB_PASS: ${{ secrets.DB_PASS }}
-     DB_DATABASE: ${{ secrets.DB_DATABASE }}
-     DB_PORT: ${{ secrets.DB_PORT }}
-     DB_DIALECT: postgres
-     PORT: ${{ secrets.PORT }}
-     NODE_ENV: ${{ secrets.NODE_ENV }}
     strategy:
       matrix:
         node-version: [18.x]
@@ -29,6 +20,16 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: set up test database
+      env:
+       DB_HOST: ${{ secrets.DB_HOST }}
+       DB_USER: ${{ secrets.DB_USER }}
+       DB_PASS: ${{ secrets.DB_PASS }}
+       DB_DATABASE: ${{ secrets.DB_DATABASE }}
+       DB_PORT: ${{ secrets.DB_PORT }}
+       DB_DIALECT: postgres
+       PORT: ${{ secrets.PORT }}
+       NODE_ENV: ${{ secrets.NODE_ENV }}
         
     - run: npm install    
     - run: npm ci
