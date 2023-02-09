@@ -37,7 +37,7 @@ psql postgres
 npx sequelize db:create
 
 // Connect to a database
-\c postgres-users
+\c cloud-postgres
 
 // drop a database
 npx sequelize db:drop
