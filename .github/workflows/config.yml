@@ -21,7 +21,7 @@ jobs:
        DB_PASS: ${{ secrets.DB_PASS }}
        DB_DATABASE: ${{ secrets.DB_DATABASE }}
        DB_PORT: ${{ secrets.DB_PORT }}
-       DB_DIALECT: postgres
+       DB_DIALECT: ${{ secrets.DB_DIALECT }}
        PORT: ${{ secrets.PORT }}
        NODE_ENV: ${{ secrets.NODE_ENV }}
     - name: Use Node.js ${{ matrix.node-version }}
