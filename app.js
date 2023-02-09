@@ -39,43 +39,22 @@ app.use(deleteProductRouter);
 app.use(health);
 app.use(addProduct);
 
-const connectDb= async()=>{
-    console.log("checking the database connection")
-    try{
-      await sequelize.sync();  
-      await sequelize.authenticate();  
-      console.log("Database connection established")
-    }
-    catch(e){
-     console.log("Database connection failed")
-     process.exit(1);
-    }
-}
-//making a self executed function
-(async()=>{
-   await connectDb();
-   console.log(`Attempting to run server on ${port}`)
-   app.listen(port,()=>{
-    console.log(`Server is running at ${port}`);
 
-   });
+app.listen({port:3030},async()=>{
+    console.log("Server is running at port 3030");
+    sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connection to the database has been established successfully.');
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
-})()
-// app.listen({port:3030},async()=>{
-//     console.log("Server is running at port 3030");
-//     sequelize
-//     .authenticate()
-//     .then(() => {
-//         console.log('Connection to the database has been established successfully.');
-//     })
-//     .catch(error => {
-//         console.error(error);
-//     });
-
-// sequelize.sync();
+sequelize.sync();
 
     
-// })
+})
 
 module.exports = app
 
