@@ -1,3 +1,4 @@
+
 const {sequelize,User} = require('../models')
 const express= require('express');
 const router= express.Router();
@@ -5,9 +6,8 @@ const bcrypt= require('bcrypt');
 var auth= require('../auth/auth')
 router.use(express.json());
 
-//Authenticated  Rest api to check health of application
 
-router.put('/user/:userId',async(req,res)=>{
+router.put('/v1/user/:userId',async(req,res)=>{
 
     if(!req.headers.authorization || req.headers.authorization.indexOf('Basic')=== -1)
     {
@@ -28,8 +28,8 @@ router.put('/user/:userId',async(req,res)=>{
                 console.log(result)
                 if(err)
                 {
-                    res.status(400).json({
-                        message:'Bad Request'
+                    res.status(401).json({
+                        message:'Unauthorized'
                     })
                 }
                 else if(users[0].id!=req.params.userId)
@@ -41,7 +41,7 @@ router.put('/user/:userId',async(req,res)=>{
                 }
                 else if(result)
                 {
-                    let {first_name,last_name,password}= req.body;
+                    let {first_name,last_name,password,username}= req.body;
                     const firstNameCheck= auth.nameCheck(first_name);
                    if(firstNameCheck.status!=200)
                    {
@@ -52,7 +52,7 @@ router.put('/user/:userId',async(req,res)=>{
                            })
                    }
                       
-                      
+               
                    const passwordCheck= auth.passwordCheck(password);
                    if(passwordCheck.status!=200)
                    {
@@ -65,13 +65,12 @@ router.put('/user/:userId',async(req,res)=>{
                    
                        try
                        {
-                        if (req.body.account_updated!=undefined || req.body.account_created!=undefined || req.body.username!=undefined) {
+                        if (req.body.username != undefined || req.body.account_updated != undefined || req.body.account_created != undefined) {
                             return res.json(
                                 {
                                     status: 400,
                                     message: "Bad Request"
-                                })                        
-                          }
+                                })                          }
                         let salt =  bcrypt.genSalt(10);
                         let hashPassword =  bcrypt.hashSync(password, parseInt(salt));
                         console.log(hashPassword);

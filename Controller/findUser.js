@@ -1,4 +1,3 @@
-
 const {sequelize,User} = require('../models')
 const express= require('express');
 const router= express.Router();
@@ -8,7 +7,7 @@ router.use(express.json());
 
 //Authenticated API- get request to retrieve user details
 
-router.get('/user/:userId',async(req,res)=>{
+router.get('/v1/user/:userId',async(req,res)=>{
 
     console.log(req.params.userId)
     if(!req.headers.authorization || req.headers.authorization.indexOf('Basic')=== -1)
@@ -30,13 +29,14 @@ router.get('/user/:userId',async(req,res)=>{
                 if(err)
                 {
                     res.status(401).json({
+                        status: 401,
                         message:'Unauthorized'
                     })
                 }
                 else if(users[0].id!=req.params.userId)
                 {
                     return res.status(403).json({
-                        message:'Forbidden Request'
+                        message:'Forbidden'
     
                     })
                 }
@@ -70,3 +70,5 @@ router.get('/user/:userId',async(req,res)=>{
 })
 
 module.exports= router;
+
+

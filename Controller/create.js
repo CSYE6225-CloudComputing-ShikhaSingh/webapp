@@ -5,18 +5,27 @@ const router= express.Router();
 const bcrypt= require('bcrypt');
 var auth= require('../auth/auth')
 router.use(express.json());
+const { Validator } = require('node-input-validator');
+
 
 //Unauthenticated Post Rest api to create users
-router.post('/',async(req,res)=>{
-    
-    console.log(req.body.username)
+router.post('/v1/user',async(req,res)=>{
+    let {first_name,last_name,password,username}= req.body;
 
-    User.findOne({where:{username:req.body.username}}).then(user=>{
+    if(first_name==undefined || last_name==undefined || password==undefined || username==undefined)
+    {
+        res.status(400).json(
+            {
+                status:400,
+                message:"Bad Request"
+            });
+    }
+    else{
+       User.findOne({where:{username:req.body.username}}).then(user=>{
         if(user){
             return res.status(400).json({msg: 'Bad Request: Username already exists'});
         }
-        else{
-            let {first_name,last_name,password,username}= req.body;
+        else{ 
             const firstNameCheck= auth.nameCheck(first_name);
            if(firstNameCheck.status!=200)
            {
@@ -75,7 +84,7 @@ router.post('/',async(req,res)=>{
         }
     
     })
-    
+} 
 })         
 
 
