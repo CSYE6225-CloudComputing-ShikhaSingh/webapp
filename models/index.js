@@ -14,8 +14,8 @@ const db = {};
 //   sequelize = new Sequelize(process.env[config.use_env_variable], {config});
 // } else {
  const sequelize = new Sequelize(config.database , config.username, config.password, {
-  host: config.HOST || process.env.DB_HOST,
-  port: config.PORT || process.env.DB_PORT,
+  host: config.host || process.env.DB_HOST,
+  port: config.port || process.env.DB_PORT,
   dialect: config.dialect || 'postgres'
  });
 //}
