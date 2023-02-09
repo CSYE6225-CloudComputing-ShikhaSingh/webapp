@@ -2,7 +2,7 @@ const express= require('express');
 const {Product}= require('../models')
 const {User} = require('../models')
 const router= express();
-const bcrypt= require('bcryptjs');
+const bcrypt= require('bcrypt');
 const Op = require('sequelize').Op;
 const { Validator } = require('node-input-validator');
 router.use(express.json());
