@@ -5,16 +5,20 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
-//const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')['development'];
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+//let sequelize;
+// if (config.use_env_variable) {
+//   sequelize = new Sequelize(process.env[config.use_env_variable], {config});
+// } else {
+ const sequelize = new Sequelize(config.database , config.username, config.password, {
+  host: config.HOST || process.env.DB_HOST,
+  port: config.PORT || process.env.DB_PORT,
+  dialect: config.dialect || 'postgres'
+ });
+//}
 
 fs
   .readdirSync(__dirname)
