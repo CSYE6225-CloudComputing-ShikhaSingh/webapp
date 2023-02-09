@@ -4,9 +4,9 @@ CSYE 6225 - Spring 2023
 
 Welcome to Cloud Computing Course
 
-I have created the repository "webapp" and it has two branches "main" and "assignment1"
+I have created the repository "webapp" and it has two branches "main" and "assignment2" for assignment 2
 
-Assignment - 1:
+Assignment - 2:
 
 The requirement is to create rest api for creating, retrieving and updating the details of users.
 
