@@ -90,6 +90,13 @@ router.post('/v1/product',(req,res)=>{
                 }
             })
                 }
+                else
+                {
+                    res.status(401).json({
+                        message:"Unauthorized",
+                    })
+
+                }
            })
        }
        else{
