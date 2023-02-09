@@ -1,9 +1,8 @@
 const express= require('express');
 const router= express.Router();
 
-//Unauthenticated  Rest api to check health of application
 
-router.get('/healthz',(req,res)=>{
+router.get('/v1/healthz',(req,res)=>{
 
     res.status(200).json({
         status: 200,

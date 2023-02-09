@@ -41,7 +41,7 @@ router.delete('/v1/product/:productId',async(req,res)=>{
                             
                         }
                         else{
-                            return res.status(403).send("Not allowed")
+                            return res.status(403).send("Forbidden")
                         }
                     }
                     else{
