@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
       references:{
-        model:'Users',   //here it requires table name and not model name
+        model:'users',   //here it requires table name and not model name
         key:'id'
       }
     },

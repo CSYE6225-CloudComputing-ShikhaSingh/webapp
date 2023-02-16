@@ -40,7 +40,7 @@ router.post('/v1/product',(req,res)=>{
                         description:'required',
                         sku:'required',
                         manufacturer:'required',
-                        quantity:'required|integer|min:1'
+                        quantity:'required|integer|min:0|max:100'
                     })
                     validator.check().then((matched)=>{
                         if (!matched ) {
@@ -73,6 +73,7 @@ router.post('/v1/product',(req,res)=>{
                                      "description": product.description,
                                      "sku": product.sku,
                                      "manufacturer": product.manufacturer,
+                                     "quantity":product.quantity,
                                      "date_added": product.updatedAt,
                                      "date_last_updated": product.updatedAt,
                                       "owner_user_id": users[0].id

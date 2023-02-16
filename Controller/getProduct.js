@@ -16,9 +16,10 @@ router.get('/v1/product/:productId',(req,res)=>{
             "description": product.description,
             "sku": product.sku,
             "manufacturer": product.manufacturer,
+            "quantity":product.quantity,
             "date_added": product.updatedAt,
             "date_last_updated": product.updatedAt,
-             "owner_user_id": product.owner_user_id
+            "owner_user_id": product.owner_user_id
        })  
     }
     else{
