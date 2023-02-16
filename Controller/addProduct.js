@@ -3,7 +3,7 @@ const {Product}= require('../models')
 const {User} = require('../models')
 const router= express();
 const bcrypt= require('bcrypt');
-const { Validator } = require('node-input-validator');
+const { Validator } = require('node-input-validator')
 router.use(express.json());
 
 

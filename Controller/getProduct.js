@@ -3,7 +3,7 @@ const express= require('express');
 const router= express.Router();
 const bcrypt= require('bcrypt');
 var auth= require('../auth/auth')
-router.use(express.json());
+router.use(express.json())
 
 router.get('/v1/product/:productId',(req,res)=>{
    Product.findOne({where:{id:req.params.productId}}).then((product)=>{
