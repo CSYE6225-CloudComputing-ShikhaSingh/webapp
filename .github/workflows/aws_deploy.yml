@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Package Artifact
-        run: tar -czvf app.tar.gz dist
+        run: tar -vcfz app.tar.gz dist
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
