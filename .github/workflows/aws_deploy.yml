@@ -24,11 +24,16 @@ jobs:
       - name: Build Application
         run: npm run build
 
-      - name: Package Artifact
-        run: tar -vcfz webapp.tar.gz dist
+      - name: build zip file
+        run: |
+          echo "PWD: $(pwd)"
+          cd ../
+          zip -r webservice.zip webservice
+          ls -l
+          echo "PWD: $(pwd)"
+          cd webservice
+          echo "mkdir"; mkdir appDir
+          cp ../webservice.zip appDir
+          ls -l appDir
+          echo $GITHUB_PATH
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: webapp
-          path: webapp.tar.gz
