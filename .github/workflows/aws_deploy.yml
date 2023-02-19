@@ -23,17 +23,16 @@ jobs:
 
       - name: Build Application
         run: npm run build
-
+        
       - name: build zip file
         run: |
           echo "PWD: $(pwd)"
           cd ../
-          zip -r webservice.zip webservice
+          zip -r webapp.zip webapp
           ls -l
           echo "PWD: $(pwd)"
-          cd webservice
+          cd webapp
           echo "mkdir"; mkdir appDir
-          cp ../webservice.zip appDir
+          cp ../webapp.zip appDir
           ls -l appDir
           echo $GITHUB_PATH
-
