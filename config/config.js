@@ -1,13 +1,11 @@
 
-require('dotenv').config()
-
 module.exports=
 {
   "development": {
     "username": "postgres",
     "password": "pgadmin",
     "database": "cloudpostgres",
-    "host": "127.0.0.0/1",
+    "host": "127.0.0.0",
     "dialect": 'postgres',
     "port": "5432"
   },
