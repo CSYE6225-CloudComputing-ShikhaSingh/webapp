@@ -7,10 +7,16 @@ env:
 on:
   pull_request:
     branches: [main]
+<<<<<<< HEAD
 
 jobs:
   permissions:
     id-token: write # This is required for requesting the JWT
+=======
+    
+permissions:
+    id-token: write # This is required for requesting the jwt
+>>>>>>> 19a5e45 (deploy file)
     contents: read  # This is required for actions/checkout
 
   packer:
