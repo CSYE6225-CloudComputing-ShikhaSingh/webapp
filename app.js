@@ -47,9 +47,9 @@ app.listen({port:3030},async()=>{
     .then(() => {
         console.log('Connection to the database has been established successfully.');
     })
-    .catch(error => {
-        console.error(error);
-    });
+    // .catch(error => {
+    //     console.error(error);
+    // });
 
 sequelize.sync();
 
