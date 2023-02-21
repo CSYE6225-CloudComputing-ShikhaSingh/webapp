@@ -5,7 +5,7 @@ module.exports=
     "username": "postgres",
     "password": "pgadmin",
     "database": "cloudpostgres",
-    "host": "127.0.0.0",
+    "host": "localhost",
     "dialect": 'postgres',
     "port": "5432"
   },
