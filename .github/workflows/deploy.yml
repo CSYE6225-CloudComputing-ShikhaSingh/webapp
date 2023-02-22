@@ -17,17 +17,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: packer
-
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::475967084164:role/github-role
-          aws-region: "us-east-1"
-         
       - name: build zip file
         run: |
           echo "PWD: $(pwd)"
@@ -55,6 +49,26 @@ jobs:
           command: validate
           arguments: -syntax-only
           target: ./packer/aws-ami.pkr.hcl
+
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    needs: build
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::475967084164:role/github-role
+          aws-region: "us-east-1"
+      - name: Create AMI
+        run: |
+          # Use Packer to create the AMI
+          packer build --var-file='./packer/variable.pkvars.hcl' ./packer/aws-ami.pkr.hcl
+      
+
+         
+
+
 
      
 
