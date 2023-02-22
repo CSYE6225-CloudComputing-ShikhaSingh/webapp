@@ -17,7 +17,7 @@ jobs:
       - name: Validate AMI template
         run: |
           # Use Packer to validate the AMI template
-          packer validate ./packer/aws-ami.pkr.hcl "--var-file=./packer/variable.pkrvars.hcl"
+          packer validate ./packer/aws-ami.pkr.hcl "-var-file=./packer/variable.pkrvars.hcl"
         continue-on-error: true
       
       - name: Fail PR status check if template is invalid
@@ -56,4 +56,4 @@ jobs:
       - name: Create AMI
         run: |
           # Use Packer to create the AMI
-          packer build ./packer/aws-ami.pkr.hcl "--var-file=./packer/variable.pkrvars.hcl"
+          packer build ./packer/aws-ami.pkr.hcl "-var-file=./packer/variable.pkrvars.hcl"
