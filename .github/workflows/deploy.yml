@@ -1,27 +1,38 @@
-name: AWS AMI using Packer Config
-env:
-  CI: true
-  ssh_username: "ec2-user"
-  GITHUB_REPO_PATH: ${{ github.workspace }}
+name: Build AMI
 
 on:
   pull_request:
-    branches: [main]
-
-permissions:
+    types: [opened, synchronize, reopened, closed]
+  permissions:
     id-token: write # This is required for requesting the jwt
     contents: read  # This is required for actions/checkout
-
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Validate AMI template
+        run: |
+          # Use Packer to validate the AMI template
+          packer validate ./packer/aws-ami.pkr.hcl "--var-file=./packer/variable.pkrvars.hcl"
+        continue-on-error: true
+      
+      - name: Fail PR status check if template is invalid
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "AMI template is invalid. Please fix the errors and try again."
+            exit 1
+          fi
 
   build:
     runs-on: ubuntu-latest
-    name: packer
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
-
+      
       - name: build zip file
         run: |
           echo "PWD: $(pwd)"
@@ -34,41 +45,14 @@ jobs:
           cp ../webapp.zip appDir
           ls -l appDir
           echo $GITHUB_PATH
-
-      - name: Initialize Packer Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: init
-          target: ./packer/aws-ami.pkr.hcl
-
-
-      - name: Validate Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          arguments: -syntax-only
-          target: ./packer/aws-ami.pkr.hcl
-
-  publish:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    needs: build
-    steps:
+      
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::475967084164:role/github-role
           aws-region: "us-east-1"
+      
       - name: Create AMI
         run: |
           # Use Packer to create the AMI
-          packer build --var-file='./packer/variable.pkvars.hcl' ./packer/aws-ami.pkr.hcl
-      
-
-         
-
-
-
-     
-
-
+          packer build ./packer/aws-ami.pkr.hcl "--var-file=./packer/variable.pkrvars.hcl"
