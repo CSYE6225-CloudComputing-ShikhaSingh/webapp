@@ -52,7 +52,11 @@ jobs:
           role-to-assume: arn:aws:iam::475967084164:role/github-role
           aws-region: "us-east-1"
       
-      - name: Create AMI
-        run: |
-          # Use Packer to create the AMI
-          packer build  -var-file=./packer/variable.pkrvars.hcl ./packer/aws-ami.pkr.hcl
+      - name: Build Artifact
+        uses: hashicorp/packer-github-actions@master
+        with:
+         command: build
+         arguments: "-var-file=./packer/variable.pkrvars.hcl "
+         target: ./packer/aws-ami.pkr.hcl
+         env:
+          PACKER_LOG: 1
