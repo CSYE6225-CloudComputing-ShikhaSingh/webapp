@@ -27,7 +27,7 @@ jobs:
           role-to-assume: arn:aws:iam::475967084164:role/github-role
           aws-region: "us-east-1"
           
-    # build artifact
+    # build Artifact
       - name: Build Artifact
         uses: hashicorp/packer-github-actions@master
         with:
