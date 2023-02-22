@@ -1,8 +1,12 @@
-name: AWS AMI using Packer Config
+name: AWS AMI
 
 on:
   pull_request:
-    branches: [main]
+    types: [closed]
+    pull_request:
+      branches:
+        - main
+      merged: true
 
 permissions:
     id-token: write # This is required for requesting the jwt
@@ -12,8 +16,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: packer
-  if: github.event.pull_request.merged == true
+    name: AMI-Build
   steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
