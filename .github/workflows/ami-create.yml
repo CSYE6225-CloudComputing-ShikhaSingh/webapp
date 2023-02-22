@@ -10,14 +10,14 @@ on:
 
 permissions:
     id-token: write 
-    contents: read  # This is required for actions/checkout
+    contents: read
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
     name: AMI-Build
-  steps:
+    steps:
     - name: Step 2 - Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
