@@ -54,8 +54,8 @@ jobs:
       - name: Build Artifact
         uses: hashicorp/packer-github-actions@master
         with:
-         command: build
-         arguments: "-var-file=./packer/variable.pkrvars.hcl"
-         target: ./packer/aws-ami.pkr.hcl
-         env:
-          PACKER_LOG: 2
+          command: build
+          arguments: "-var-file=./packer/variable.pkrvars.hcl"
+          target: ./packer/aws-ami.pkr.hcl
+          env:
+           PACKER_LOG: 2
