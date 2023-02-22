@@ -3,13 +3,13 @@ name: Build AMI
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
-permissions:
+  permissions:
     id-token: write # This is required for requesting the jwt
     contents: read  # This is required for actions/checkout
 jobs:
   validate:
     runs-on: ubuntu-latest
-    name: packer
+    name: packer-build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -17,7 +17,7 @@ jobs:
       - name: Validate AMI template
         run: |
           # Use Packer to validate the AMI template
-          packer validate ./packer/aws-ami.pkr.hcl "-var-file=./packer/variable.pkrvars.hcl"
+          packer validate  -var-file=./packer/variable.pkrvars.hcl ./packer/aws-ami.pkr.hcl
         continue-on-error: true
       
       - name: Fail PR status check if template is invalid
@@ -56,4 +56,4 @@ jobs:
       - name: Create AMI
         run: |
           # Use Packer to create the AMI
-          packer build ./packer/aws-ami.pkr.hcl "-var-file=./packer/variable.pkrvars.hcl"
+          packer build  -var-file=./packer/variable.pkrvars.hcl ./packer/aws-ami.pkr.hcl
