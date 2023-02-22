@@ -42,7 +42,6 @@ jobs:
           target: ./packer/aws-ami.pkr.hcl
 
 
-     # validate templates
       - name: Validate Template
         uses: hashicorp/packer-github-actions@master
         with:
