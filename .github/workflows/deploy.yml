@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Step 2 - Configure AWS Credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::475967084164:role/github-role
@@ -56,14 +56,6 @@ jobs:
           arguments: -syntax-only
           target: ./packer/aws-ami.pkr.hcl
 
-      # build artifact
-      - name: Build Artifact
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: build
-          arguments: "--var-file=./packer/variable.pkrvars.hcl "
-          target: ./packer/aws-ami.pkr.hcl
-        env:
-          PACKER_LOG: 1
+     
 
 
