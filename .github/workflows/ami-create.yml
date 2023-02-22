@@ -9,7 +9,7 @@ on:
       merged: true
 
 permissions:
-    id-token: write # This is required for requesting the jwt
+    id-token: write 
     contents: read  # This is required for actions/checkout
 
 jobs:
