@@ -1,4 +1,4 @@
-name: Validate the packer template
+name: Validate packer template
 
 env:
   CI: true
