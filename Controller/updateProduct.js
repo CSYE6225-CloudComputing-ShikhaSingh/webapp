@@ -43,7 +43,7 @@ router.put('/v1/product/:productId',async(req,res)=>{
                         description:'required',
                         sku:'required',
                         manufacturer:'required',
-                        quantity:'required|integer|min:0|min:100'
+                        quantity:'required|integer|min:0|max:100'
                        })
                        validator.check().then((matched)=>{
                          if (!matched ) 
