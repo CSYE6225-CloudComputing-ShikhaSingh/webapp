@@ -4,7 +4,7 @@ CSYE 6225 - Spring 2023
 
 Welcome to Cloud Computing Course
 
-I have created the repository "webapp" and it has two branches "main" and "assignment2" for assignment 2
+I have created the repository "webapp" for the development of nodejs application
 
 Assignment - 2:
 
@@ -58,6 +58,68 @@ npm start
 Test the application:
 
 npm test
+
+Assignment 4:
+
+In this assignment, we will be creating an Amazon Machine Image (AMI) for a Node.js application using Packer and then creating an EC2 instance using Terraform.
+
+Prerequisites
+
+1. An AWS account
+2. Packer and Terraform installed on your machine
+3. Git installed on your machine
+4. Basic knowledge of Node.js, Packer, and Terraform
+
+Step 1: Create an AMI with Packer
+
+In the packer directory, create the aws-ami.pkr.hcl file
+
+Modify the source_ami value to your desired base AMI.
+
+Modify the ami_name value to your desired name for the created AMI.
+
+Save and close the aws-ami.pkr.hcl file.
+
+In the packer directory, run the following command to validate the Packer template:
+
+packer validate aws-ami.pkr.hcl
+
+If the validation is successful, run the following command to create the AMI:
+
+packer build aws-ami.pkr.hcl
+
+Once the AMI creation process is complete, take note of the created AMI ID. We will use this in the next step.
+
+Step 3: Create an EC2 instance with Terraform
+
+In the terraform directory, open the variables.tf file and modify the access_key and secret_key values with your AWS access key and secret key.
+
+Modify the ami_id value with the AMI ID that was created in the previous step.
+
+Save and close the variables.tf file.
+
+Run the following command to initialize the Terraform directory:
+
+terraform init
+
+Run the following command to validate the Terraform configuration:
+
+terraform validate
+
+If the validation is successful, run the following command to create the EC2 instance:
+
+terraform apply
+
+When prompted to confirm the creation, enter yes.
+
+Wait for the creation process to complete. Once complete, Terraform will output the public IP address of the created EC2 instance.
+
+To destroy the created resources, run the following command:
+
+terraform destroy
+
+When prompted to confirm the destruction, enter yes.
+
 
 
 
