@@ -1,0 +1,44 @@
+name: Validate the packer template
+
+env:
+  CI: true
+  ssh_username: "ec2-user"
+  GITHUB_REPO_PATH: ${{ github.workspace }}
+  
+on:
+   pull_request:
+    branches: [main]
+
+jobs:
+  packer_init_validate:
+    runs-on: ubuntu-latest
+    name: packer-validate
+    steps:
+    - name: Step 1 - Checkout code from the branch
+      uses: actions/checkout@v2
+          
+    - name: Step 2 - zip all the webService files
+      run: |
+          echo "PWD: $(pwd)"
+          cd ../
+          zip -r webapp.zip webapp
+          ls -l
+          echo "PWD: $(pwd)"
+          cd webapp
+          echo "mkdir"; mkdir appDir
+          cp ../webapp.zip appDir
+          ls -l appDir
+          echo $GITHUB_PATH   
+
+    - name: Step 3 - Packer Init
+      uses: hashicorp/packer-github-actions@master
+      with:
+          command: init
+          target: ./packer/aws-ami.pkr.hcl
+
+    - name: Step 4 - Validate Packer Template
+      uses: hashicorp/packer-github-actions@master
+      with:
+          command: validate
+          arguments: -syntax-only
+          target: ./packer/aws-ami.pkr.hcl

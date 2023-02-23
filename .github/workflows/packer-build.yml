@@ -1,7 +1,14 @@
 name: Build AMI
 
+env:
+  CI: true
+  ssh_username: "ec2-user"
+  GITHUB_REPO_PATH: ${{ github.workspace }}
+
 on:
-  pull_request:
+  push:
+   branches: [main]
+   
 permissions:
     id-token: write # This is required for requesting the jwt
     contents: read  # This is required for actions/checkout
@@ -12,34 +19,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Step 5 - Validate Packer Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          arguments: -syntax-only
-          target: ./packer/aws-ami.pkr.hcl
-
-      # - name: Validate AMI template
-      #   run: |
-      #     # Use Packer to validate the AMI template
-      #     packer validate  -var-file=./packer/variable.pkrvars.hcl ./packer/aws-ami.pkr.hcl
-      #   continue-on-error: true
-      
-#      - name: Fail PR status check if template is invalid
-#        run: |
-#          if [ $? -ne 0 ]; then
-#            echo "AMI template is invalid. Please fix the errors and try again."
-#            exit 1
-#          fi
-
-  build:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
+        
       - name: build zip file
         run: |
           echo "PWD: $(pwd)"
@@ -65,5 +45,3 @@ jobs:
           command: build
           arguments: -var-file=./packer/variable.pkrvars.hcl
           target: ./packer/aws-ami.pkr.hcl
-          env:
-           PACKER_LOG: 1
