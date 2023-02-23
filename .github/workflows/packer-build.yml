@@ -1,0 +1,46 @@
+name: Build AMI
+
+env:
+  CI: true
+  ssh_username: "ec2-user"
+  GITHUB_REPO_PATH: ${{ github.workspace }}
+
+on:
+  push:
+   branches: [main]
+permissions:
+    id-token: write # This is required for requesting the jwt
+    contents: read  # This is required for actions/checkout
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: packer-build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: build zip file
+        run: |
+          echo "PWD: $(pwd)"
+          cd ../
+          zip -r webapp.zip webapp
+          ls -l
+          echo "PWD: $(pwd)"
+          cd webapp
+          echo "mkdir"; mkdir appDir
+          cp ../webapp.zip appDir
+          ls -l appDir
+          echo $GITHUB_PATH
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::475967084164:role/github-role
+          aws-region: "us-east-1"
+      
+      - name: Build Artifact
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: build
+          arguments: -var-file=./packer/variable.pkrvars.hcl
+          target: ./packer/aws-ami.pkr.hcl
