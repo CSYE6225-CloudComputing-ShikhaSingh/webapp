@@ -5,6 +5,8 @@ const router= express();
 const bcrypt= require('bcrypt');
 const Op = require('sequelize').Op;
 const { Validator } = require('node-input-validator');
+const Joi = require('joi');
+
 router.use(express.json());
 
 //Authenticated API- get request to retrieve user details
@@ -146,7 +148,20 @@ router.patch('/v1/product/:productId',async(req,res)=>{
                 }
                 else if(result)
                 {
-                    Product.findAll({where:{id:req.params.productId}}).then(product=>{
+                    const patchSchema = Joi.object({
+                        name: Joi.string().optional(),
+                        description: Joi.string().optional(),
+                        sku: Joi.string().optional(),
+                        manufacturer: Joi.string().optional(),
+                        quantity: Joi.number().integer().min(0).max(100).optional()
+                      });
+                      
+                      const { error } = patchSchema.validate(req.body);
+                      if (error) {
+                        return res.status(400).json({ message: error.details[0].message });
+                      }
+                    
+                         Product.findAll({where:{id:req.params.productId}}).then(product=>{
                         if(product[0].owner_user_id==undefined)
                         {
                             return res.status(400).json({
