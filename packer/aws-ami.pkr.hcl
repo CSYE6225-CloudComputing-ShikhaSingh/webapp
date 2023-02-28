@@ -42,7 +42,7 @@ variable "launch_permissions" {
   type    = string
   default = "private"
 }
-source "amazon-ebs" "ec2" {
+source "amazon-ebs" "ec2" 
   ami_name        = "${var.ami_prefix}-${local.timestamp}"
   ami_description = var.ami_description
   instance_type   = var.instance
