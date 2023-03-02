@@ -1,7 +1,7 @@
 const {sequelize,User} = require('../models')
 const express= require('express');
 const router= express.Router();
-const bcrypt= require('bcrypt');
+var bcrypt = require('bcryptjs');
 var auth= require('../auth/auth')
 router.use(express.json());
 
