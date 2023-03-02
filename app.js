@@ -1,43 +1,36 @@
-const { truncateSync } = require('fs');
-var queryType = require('query-types');
-
 const {sequelize} = require('./models')
 const express= require('express');
+const bodyParser = require('body-parser');
 const postRouter= require('./Controller/create');
 const getRouter= require('./Controller/findUser');
 const updateRouter= require('./Controller/update');
 const updateProduct= require('./Controller/updateProduct');
-
 const deleteProductRouter= require('./Controller/deleteProduct');
 const health= require('./Controller/health');
 const addProduct= require('./Controller/addProduct');
 const getProduct= require('./Controller/getProduct');
-
-require('dotenv').config();
+const uploadImageRouter= require('./Controller/uploadImage')
+const imageRouter= require('./Controller/getImage')
+const deleteImageRouter= require('./Controller/deleteImage')
+  
 const port= process.env.PORT || 3000
-
-
 const app= express();
 app.use(express.json());
-app.use(queryType.middleware())
-
-var validator = require("email-validator");
-var passwordValidator = require('password-validator');
-var schema = new passwordValidator();
-var auth= require('./auth/auth')
-
+app.use(bodyParser.json())
 //Unauthenticated Post Rest api to create users
 app.use(postRouter);
 app.use(getRouter);
 app.use(getProduct);
-
-
 // Authenticated API - put request to update user details
 app.use(updateRouter);
 app.use(updateProduct);
 app.use(deleteProductRouter);
 app.use(health);
 app.use(addProduct);
+app.use('/',imageRouter);
+app.use('/',uploadImageRouter);
+app.use('/',deleteImageRouter);
+
 
 
 app.listen({port:3030},async()=>{
@@ -47,13 +40,7 @@ app.listen({port:3030},async()=>{
     .then(() => {
         console.log('Connection to the database has been established successfully.');
     })
-    // .catch(error => {
-    //     console.error(error);
-    // });
-
-sequelize.sync();
-
-    
+sequelize.sync(); 
 })
 
 module.exports = app

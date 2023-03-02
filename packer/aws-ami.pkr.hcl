@@ -42,21 +42,22 @@ variable "launch_permissions" {
   type    = string
   default = "private"
 }
+
 source "amazon-ebs" "ec2" {
-  ami_name        = "${var.ami_prefix}-${local.timestamp}"
-  ami_description = var.ami_description
-  instance_type   = var.instance
-  profile         = var.profile
-  ssh_username    = var.ssh_username
-  ami_users       = var.ami_users
-  region          = var.vpc_region
-  source_ami      = var.source_ami
-  vpc_id          = var.vpc_id
+  ami_name                    = "${var.ami_prefix}-${local.timestamp}"
+  ami_description             = var.ami_description
+  instance_type               = var.instance
+  profile                     = var.profile
+  ssh_username                = var.ssh_username
+  ami_users                   = var.ami_users
+  region                      = var.vpc_region
+  source_ami                  = var.source_ami
+  vpc_id                      = var.vpc_id
   associate_public_ip_address = true
-    vpc_filter {
+  vpc_filter {
     filters = {
-      "tag:Name": "default-vpc",
-      "isDefault": "true",
+      "tag:Name" : "default-vpc",
+      "isDefault" : "true",
     }
   }
   launch_block_device_mappings {
@@ -76,13 +77,14 @@ build {
   provisioner "file" {
     destination = "/tmp/"
     source      = "${var.GITHUB_PATH}/appDir/webapp.zip"
-  }
 
+  }
   provisioner "shell" {
     scripts = [
-      "./packer/provisioner.sh",
-      "./packer/script.sh"
+      "provisioner.sh",
+      "script.sh"
     ]
+
   }
 
 }
