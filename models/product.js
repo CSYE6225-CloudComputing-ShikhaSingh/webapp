@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.User,{foreignKey:'owner_user_id'});
+
     }
   }
   Product.init({
@@ -33,10 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     owner_user_id:{
       allowNull: false,
       type: DataTypes.INTEGER,
-      references:{
-        model:'users',   //here it requires table name and not model name
-        key:'id'
-      }
+
     },
   }, {
     sequelize,

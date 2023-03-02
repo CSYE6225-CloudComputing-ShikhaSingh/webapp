@@ -2,10 +2,22 @@ const express= require('express');
 const {Product}= require('../models')
 const {User} = require('../models')
 const router= express();
-const bcrypt= require('bcrypt');
+var bcrypt = require('bcryptjs');
+const AWS= require('aws-sdk');
 const { Validator } = require('node-input-validator');
+const {Image} = require('../models');
 router.use(express.json());
 
+// const BUCKET_NAME= "ssthakur-bucket" //process.env.S3_BUCKET_NAME
+//   const IAM_USER_KEY="AKIAW5UOZK2CGLIED3F5"
+//   const IAM_USER_SECRET="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"
+
+const s3= new AWS.S3({
+    // accessKeyId: IAM_USER_KEY,
+    // secretAccessKey: IAM_USER_SECRET,
+    Bucket: process.env.S3_BUCKET_NAME,
+    region: 'us-east-1'
+})
 router.delete('/v1/product/:productId',async(req,res)=>{
      
     console.log(req.params.productId);
@@ -36,6 +48,22 @@ router.delete('/v1/product/:productId',async(req,res)=>{
                     {
                         if(product[0]["owner_user_id"]==user[0].id)
                         {
+
+                            Image.findAll({where:{product_id:req.params.productId}}).then((images)=>{
+                                const params = {
+                                    Bucket: process.env.S3_BUCKET_NAME,
+                                    Key:   product[0].owner_user_id+'/'+ images[0].file_name
+    
+                                }   
+                                s3.deleteObject(params).promise();            
+                                Image.destroy(
+                                 {
+                                     where:{
+                                         image_id: images[0].image_id
+                                     }
+                                 })
+                            })
+                             
                             product[0].destroy()
                             return res.status(200).send("product deleted")
                             
