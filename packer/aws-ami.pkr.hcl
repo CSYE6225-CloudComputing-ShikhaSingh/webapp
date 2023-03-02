@@ -81,8 +81,8 @@ build {
   }
   provisioner "shell" {
     scripts = [
-      "provisioner.sh",
-      "script.sh"
+      "./packer/provisioner.sh",
+      "./packer/script.sh"
     ]
 
   }
