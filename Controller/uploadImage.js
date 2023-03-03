@@ -12,9 +12,7 @@ const {
     v4: uuidv4
   } = require('uuid');
 
-//   const BUCKET_NAME= "ssthakur-bucket" //process.env.S3_BUCKET_NAME
-//   const IAM_USER_KEY="AKIAW5UOZK2CGLIED3F5"
-//   const IAM_USER_SECRET="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"
+
 
 const s3 = new AWS.S3({
     region: 'us-east-1',
@@ -82,9 +80,9 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                 if(products[0]!=undefined)
                 {
                     const responses=[];
+                    console.log(req.files.length)
                     for(var i=0;i<req.files.length;i++){
                         var file = req.files[i];
-                        console.log(file)
                         if(!file)
                         {
                             res.status(400).send({
@@ -115,12 +113,21 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                
                                    s3.upload(params,async(err,data)=>{
 
-                                      const aws_metadata = JSON.parse(JSON.stringify(data));
+                                              const aws_metadata = JSON.parse(JSON.stringify(data));
                                               Image.create({
                                                product_id: req.params.productId,
                                                file_name: file.originalname,
                                                s3_bucket_path: aws_metadata.Location,
-                                               date_created: new Date()})
+                                               date_created: new Date()}).then((data)=>{
+                                                responses.push({
+                                                    "image_id": data.image_id,
+                                                     "product_id":data.product_id,
+                                                     "file_name":data.file_name,
+                                                      "date_created": data.date_created,
+                                                      "s3_bucket_path": data.s3_bucket_path
+                                                 })
+                                                res.status(200).send(responses)
+                                               })
                                                                            
                                    })          
                               }
@@ -139,11 +146,11 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                    }  
                   // promises.push(s3.upload(params).promise())
                     }
-
-                    Image.findAll({where:{product_id:req.params.productId}}).then((data)=>{
-                        res.status(201).send(data)
-
-                    })
+                   //  var result= JSON.parse(responses)
+                     // res.status(200).send(JSON.stringify(responses));
+                    // Image.findAll({where:{product_id:req.params.productId}}).then((data)=>{
+                    //     res.status(201).send(data)
+                    // })
                 }
                 else
                 {
