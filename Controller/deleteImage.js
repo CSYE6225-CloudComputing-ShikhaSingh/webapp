@@ -13,9 +13,7 @@ const router= express.Router();
 const s3 = new AWS.S3();
 router.use(express.json());
 
-const BUCKET_NAME= "ssthakur-bucket"
-const IAM_USER_KEY="AKIAW5UOZK2CGLIED3F5"
-const IAM_USER_SECRET="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"
+
 router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
     
     if(!req.headers.authorization || req.headers.authorization.indexOf('Basic')=== -1)
@@ -55,12 +53,12 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
                                     let filename= image[0].file_name
                                     console.log(filename)
                                     let s3bucket = new AWS.S3({
-                                        accessKeyId: IAM_USER_KEY,
-                                        secretAccessKey: IAM_USER_SECRET,
-                                        Bucket:"ssthakur-bucket"//process.env.S3_BUCKET_NAME
+                                        // accessKeyId: IAM_USER_KEY,
+                                        // secretAccessKey: IAM_USER_SECRET,
+                                        Bucket: process.env.S3_BUCKET_NAME
                                         });
-                                    const params = {
-                                        Bucket: "ssthakur-bucket", //process.env.S3_BUCKET_NAME,
+                                        const params = {
+                                        Bucket: process.env.S3_BUCKET_NAME,
                                         Key:   products[0].owner_user_id+'/'+ filename
                                     }    
                                 s3bucket.deleteObject(params).promise();            

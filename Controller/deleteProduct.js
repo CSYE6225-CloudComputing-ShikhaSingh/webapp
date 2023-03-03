@@ -31,40 +31,40 @@ router.delete('/v1/product/:productId',async(req,res)=>{
     const base64Credentials = req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [username, password] = credentials.split(':');
-    User.findAll({where:{username}}).then((user)=>{
-        console.log(user[0])
-        if(user[0]!=undefined)
+    User.findOne({where:{username}}).then((user)=>{
+        console.log(user);
+        if(user!=undefined)
         {
-            const db_password= user[0].password;
+            const db_password= user.password;
             console.log(db_password)
             bcrypt.hash(password,10).then((password)=> console.log(password))
             const isValid= bcrypt.compareSync(password,db_password)
             if(isValid)
             {
                 console.log('valid')
-                Product.findAll({where:{id:req.params.productId}}).then((product)=>{
-                    console.log(product[0])
-                    if(product[0]!=undefined)
+                Product.findOne({where:{id:req.params.productId}}).then((product)=>{
+                    // console.log(product[0])
+                    if(product!=undefined)
                     {
-                        if(product[0]["owner_user_id"]==user[0].id)
+                        if(product["owner_user_id"]==user.id)
                         {
 
                             Image.findAll({where:{product_id:req.params.productId}}).then((images)=>{
-                                const params = {
-                                    Bucket: process.env.S3_BUCKET_NAME,
-                                    Key:   product[0].owner_user_id+'/'+ images[0].file_name
-    
-                                }   
-                                s3.deleteObject(params).promise();            
-                                Image.destroy(
-                                 {
-                                     where:{
-                                         image_id: images[0].image_id
-                                     }
-                                 })
+                                images.forEach(image => {
+                                    const params = {
+                                        Bucket: "ssthakur-bucket",//process.env.S3_BUCKET_NAME,
+                                        Key:   user.id+'/'+ image.file_name
+                                    }  
+                                    const key=    user.id+'/'+ image.file_name
+                                    console.log(params);
+                                    s3.deleteObject(params).promise();
+                                    image.destroy();
+                                });
+                                 
+                                
                             })
                              
-                            product[0].destroy()
+                            product.destroy()
                             return res.status(200).send("product deleted")
                             
                         }

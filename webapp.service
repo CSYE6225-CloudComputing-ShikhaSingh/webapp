@@ -4,16 +4,14 @@ Documentation=https://example.com
 After=network.target   
 
 [Service]
-Environment=NODE_PORT=3030
+Environment="NODE_PORT=3030"
 EnvironmentFile=/etc/environment
 User=ec2-user
-Environment=PORT=%i
-Environment=HOST=%i
-Environment=DB_USER=%i
+Environment=DB_PORT=%i
+Environment=DB_USERNAME=%i
 Environment=DB_PASSWORD=%i
 Environment=DB_NAME=%i
-Restart=always
-RestartSec=10
+Environment=DB_HOSTNAME=%i
 WorkingDirectory=/home/ec2-user/webapp
 Type=simple
 User=ec2-user
@@ -21,4 +19,4 @@ ExecStart=/usr/bin/node app.js
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
