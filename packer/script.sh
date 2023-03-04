@@ -16,6 +16,7 @@ chmod 755 /home/ec2-user
 # sudo -u postgres psql -c "CREATE DATABASE cloudpostgres;"
 # echo "postgres is successfully installed"
 #sudo amazon-linux-extras install postgresql10
+npm i multer-s3@2.10.0
 npm install --save sequelize pg pg-hstore bcrypt
 npm install -g sequelize-cli
 # cd /home/ec2-user/webapp
