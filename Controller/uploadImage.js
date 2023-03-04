@@ -7,26 +7,29 @@ const {Image} = require('../models')
 const {User} = require('../models')
 const {Product} = require('../models')
 var bcrypt = require('bcryptjs');
+const multerS3 = require('multer-s3')
 
 const { 
     v4: uuidv4
   } = require('uuid');
 
 
-
-const s3 = new AWS.S3({
-    region: 'us-east-1',
-    Bucket: process.env.S3_BUCKET_NAME
-
-})
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now())
-    }
+  AWS.config.update({
+    region: 'us-east-1'
   })
+  
+const s3 = new AWS.S3()
+const storage = multerS3({
+  s3: s3,
+  bucket: process.env.S3_BUCKET_NAME,
+  metadata: function (req, file, cb) {
+    cb(null, { fieldName: file.fieldname });
+  },
+  key: function (req, file, cb) {
+    cb(null, Date.now().toString() + "_" + file.originalname)
+  }
+})
+
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -79,8 +82,6 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
             Product.findAll({where:{owner_user_id:users[0].id,id:req.params.productId}}).then((products)=>{
                 if(products[0]!=undefined)
                 {
-                    const responses=[];
-                    console.log(req.files.length)
                     for(var i=0;i<req.files.length;i++){
                         var file = req.files[i];
                         if(!file)
@@ -119,14 +120,13 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                                                file_name: file.originalname,
                                                s3_bucket_path: aws_metadata.Location,
                                                date_created: new Date()}).then((data)=>{
-                                                responses.push({
+                                                res.status(200).send({
                                                     "image_id": data.image_id,
                                                      "product_id":data.product_id,
                                                      "file_name":data.file_name,
                                                       "date_created": data.date_created,
                                                       "s3_bucket_path": data.s3_bucket_path
                                                  })
-                                                res.status(200).send(responses)
                                                })
                                                                            
                                    })          
