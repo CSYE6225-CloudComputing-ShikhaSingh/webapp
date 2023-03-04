@@ -7,7 +7,6 @@ const {Image} = require('../models')
 const {User} = require('../models')
 const {Product} = require('../models')
 var bcrypt = require('bcryptjs');
-const multerS3 = require('multer-s3')
 
 const { 
     v4: uuidv4
@@ -18,17 +17,21 @@ const {
     region: 'us-east-1'
   })
   
-const s3 = new AWS.S3()
-const storage = multerS3({
-  s3: s3,
-  bucket: process.env.S3_BUCKET_NAME,
-  metadata: function (req, file, cb) {
-    cb(null, { fieldName: file.fieldname });
-  },
-  key: function (req, file, cb) {
-    cb(null, Date.now().toString() + "_" + file.originalname)
-  }
+const s3 = new AWS.S3({
+    region: 'us-east-1',
+    Bucket: process.env.S3_BUCKET_NAME
+
 })
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now())
+    }
+  })
+
+
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
