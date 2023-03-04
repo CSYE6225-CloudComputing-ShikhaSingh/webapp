@@ -77,7 +77,7 @@ build {
   provisioner "file" {
     destination = "/tmp/"
     source      = "${var.GITHUB_PATH}/appDir/webapp.zip"
-   //source= "/Users/shikhasingh/Desktop/Shikha_Singh_002770739_a_05/webapp.zip"
+  
 
   }
   provisioner "shell" {

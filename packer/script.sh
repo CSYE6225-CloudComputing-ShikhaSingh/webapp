@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#install and configure postgres
 chmod 755 /home/ec2-user 
 # sudo amazon-linux-extras enable postgresql14
 # sudo yum install postgresql-server -y
