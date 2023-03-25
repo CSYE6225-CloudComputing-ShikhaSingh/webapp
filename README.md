@@ -6,7 +6,7 @@ Welcome to Cloud Computing Course
 
 I have created the repository "webapp" for the development of nodejs application
 
-Assignment - 2:
+Assignment - 2::
 
 The requirement is to create rest api for creating, retrieving and updating the details of users.
 
