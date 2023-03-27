@@ -41,7 +41,7 @@ app.listen({port:3030},async()=>{
     sequelize
     .authenticate()
     .then(() => {
-        logger.info('Connection to the database has been established successfully.');
+        logger.info('Connection to the database is established successfully.');
     })
 sequelize.sync(); 
 })
