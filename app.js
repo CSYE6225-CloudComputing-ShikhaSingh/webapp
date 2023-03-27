@@ -1,6 +1,5 @@
 const {sequelize} = require('./models')
 const express= require('express');
-
 const bodyParser = require('body-parser');
 const postRouter= require('./Controller/create');
 const getRouter= require('./Controller/findUser');
