@@ -13,6 +13,9 @@ const client = new Client("localhost", 8125);
 
 router.use(express.json());
 
+// const BUCKET_NAME= "ssthakur-bucket" //process.env.S3_BUCKET_NAME
+//   const IAM_USER_KEY="AKIAW5UOZK2CGLIED3F5"
+//   const IAM_USER_SECRET="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"
 const s3= new AWS.S3({
     // accessKeyId: IAM_USER_KEY,
     // secretAccessKey: IAM_USER_SECRET,

@@ -9,6 +9,7 @@ const { Validator } = require('node-input-validator');
 
 const Client = require('node-statsd');
 const client = new Client("localhost", 8125);
+
 router.use(express.json());
 
 router.post('/v1/product',(req,res)=>{

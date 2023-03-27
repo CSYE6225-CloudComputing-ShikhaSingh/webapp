@@ -17,8 +17,8 @@ router.get('/v1/product/:productId',(req,res)=>{
 
    Product.findOne({where:{id:req.params.productId}}).then((product)=>{
 
-    if(product!=undefined) {
-        
+    if(product!=undefined)
+    {
         return res.status(200).json({
             "id": product.id,
             "name": product.name,

@@ -15,6 +15,7 @@ const client = new Client("localhost", 8125);
 
 router.use(express.json());
 
+var image_get_request = 0;
 router.get('/v1/product/:productId/image',(req,res)=>{
 
     logger.info('Get Image for the given product Id process started');
