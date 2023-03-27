@@ -16,7 +16,6 @@ const {
     v4: uuidv4
   } = require('uuid');
 
-
   AWS.config.update({
     region: process.env.AWS_REGION
   })

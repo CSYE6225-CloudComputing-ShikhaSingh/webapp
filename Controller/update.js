@@ -130,8 +130,7 @@ router.put('/v1/user/:userId',async(req,res)=>{
           })
           logger.info("User Put method : Status code : 404 - the user " + username + " does not exist")
 
-}
-   
+}  
 });
 logger.info("Updating the user process ended");
 
