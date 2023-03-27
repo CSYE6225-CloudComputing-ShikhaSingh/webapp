@@ -1,5 +1,6 @@
 const {sequelize} = require('./models')
 const express= require('express');
+
 const bodyParser = require('body-parser');
 const postRouter= require('./Controller/create');
 const getRouter= require('./Controller/findUser');
@@ -15,6 +16,8 @@ const deleteImageRouter= require('./Controller/deleteImage')
   
 const port= process.env.PORT || 3000
 const app= express();
+const logger = require('./logger')
+
 app.use(express.json());
 app.use(bodyParser.json())
 //Unauthenticated Post Rest api to create users
@@ -34,11 +37,11 @@ app.use('/',deleteImageRouter);
 
 
 app.listen({port:3030},async()=>{
-    console.log("Server is running at port 3030");
+    logger.info("Server is running at port 3030");
     sequelize
     .authenticate()
     .then(() => {
-        console.log('Connection to the database has been established successfully.');
+        logger.info('Connection to the database has been established successfully.');
     })
 sequelize.sync(); 
 })

@@ -7,7 +7,7 @@ const  User = require("../models");
 
 function nameCheck(first_name)
 {
-    if(first_name.length==0)
+    if(first_name === undefined || first_name.length === 0)
     {
         return {
             status: 400,
@@ -34,7 +34,7 @@ function nameCheck(first_name)
 function userNameCheck(username)
 {
     //username validation
-    if(username.length==0)
+    if(username === undefined || username.length==0)
     {
         return {
              status: 400,
@@ -59,7 +59,7 @@ function userNameCheck(username)
 
     //password validation
     
-    if(password.length<6)
+    if(password === undefined || password.length<6)
     {
         return { 
             status: 400,

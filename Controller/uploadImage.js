@@ -7,6 +7,10 @@ const {Image} = require('../models')
 const {User} = require('../models')
 const {Product} = require('../models')
 var bcrypt = require('bcryptjs');
+const logger = require('../logger');
+
+const Client = require('node-statsd');
+const client = new Client("localhost", 8125);
 
 const { 
     v4: uuidv4
@@ -14,11 +18,11 @@ const {
 
 
   AWS.config.update({
-    region: 'us-east-1'
+    region: process.env.AWS_REGION
   })
   
 const s3 = new AWS.S3({
-    region: 'us-east-1',
+    region: process.env.AWS_REGION,
     Bucket: process.env.S3_BUCKET_NAME
 
 })
@@ -40,7 +44,10 @@ const fileFilter = (req, file, cb) => {
   }
   else {
     //reject a file
-    cb(null, false);
+    return cb(new Error('Only image files are allowed!'), false),
+    logger.error("Image Post method: Error Status : 400 , Message : File format is not supported"),
+    logger.info('Add Image to product process ended');   
+
   }
 }
 const upload = multer({
@@ -53,20 +60,27 @@ const upload = multer({
 
 const router= express.Router();
 
+var image_post_request = 0;
+
 router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
 
+    logger.info(' Upload image for the given product Id process started');
+    client.increment("upload_image_request");
+    
     if(!req.headers.authorization || req.headers.authorization.indexOf('Basic')=== -1)
     {
         return res.status(401).json({
             message: 'Unauthorized'
-          })
-    
+          }),
+        logger.warn("Image Post method: Error Status : 401 Missing Authorization header in the request"),
+        logger.info('Add Image to product process ended');   
     }
     const base64Credentials = req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
     const [username, password] = credentials.split(':');
+
+
     User.findAll({where:{username:username}}).then((users)=>{
-      console.log(users[0])
       if(users[0]!=undefined)
       {
           console.log(users[0].id)
@@ -77,7 +91,10 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
            {
                    res.status(401).json({
                    message:'Unauthorized'
-               })
+               }),
+               logger.error("Image Post method: Error Status : 401 " + err.message);
+               logger.info('Add Image to product process ended');   
+
            }
            else if(result)
            {
@@ -90,27 +107,33 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                         {
                             res.status(400).send({
                             message:"Bad Request (No file found to upload)"
-                            })
+                            }),
+                            logger.error("Image Post method: Error Status : 400 , Message : No file found to upload");
+                            logger.info('Add Image to product process ended');   
+
                         }
-                        if (!file.mimetype.startsWith("image/")) 
-                        {
-                          logger.info("Invalid file type");
-                          return res.status(400).json({
-                          error: "Bad Request (The file type is not supported)",
-                           });
-                        } 
+                        // if (!file.mimetype.startsWith("image/")) 
+                        // {
+                        //   logger.info("Invalid file type");
+                        //   return res.status(400).json({
+                        //   error: "Bad Request (The file type is not supported)",
+                        //    }),
+                        //    logger.error("Image Post method: Error Status : 400 , Message : File format is not supported"),
+                        //    logger.info('Add Image to product process ended');   
+
+                        // } 
                         else
                         {
                             const fileName = path.basename(file.originalname, path.extname(file.originalname)) + path.extname(file.originalname);
                             console.log('fileName: ', fileName)
                             fs.readFile(file.path,async(err,fileData)=>{
                                 console.log("creating image")
-               
+                                new_file_uuid = uuidv4();
                                 if(!err)
                                 {
                                     var params = {
                                     Bucket: process.env.S3_BUCKET_NAME ,
-                                    Key: users[0].id+'/'+ fileName, //partitioning the images
+                                    Key: users[0].id+'/'+ new_file_uuid + '/' + fileName, //partitioning the images
                                     Body: fileData,
                                    };
                
@@ -129,7 +152,11 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                                                       "date_created": data.date_created,
                                                       "s3_bucket_path": data.s3_bucket_path
                                                  })
-                                               })
+                                               }),
+                                               logger.info("Image Post method : Status code : 200 - Added the image for the " + products[0].name + " for the authorized user with email " + username + " successfully")
+                                               logger.info('Add Image to product process ended');   
+
+
                                                                            
                                    })          
                               }
@@ -137,7 +164,10 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                               {
                                 res.status(403).json({
                                     "message": "forbidden"
-                                })
+                                }),
+                                logger.error("Image Post method: Status code :403 " + username + " is forbidden to perform this action");
+                                logger.info('Add Image to product process ended');   
+
                               }
                               
                         })
@@ -158,7 +188,10 @@ router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
                 {
                     res.status(403).json({
                         "message": "forbidden"
-                    })
+                    }),
+                    logger.error("Image Post method: Status code :403 " + username + " is forbidden to perform this action");
+                    logger.info('Add Image to product process ended');   
+
                 }
             })
     }
@@ -168,7 +201,10 @@ else
 {
     res.status(404).json({
         "message": "User name doesn't exist"
-    })
+    }),
+    logger.warn("Image Post method: Status code :404 " + username + " does not exist");
+    logger.info('Add Image to product process ended');   
+
 }
 })
 })
