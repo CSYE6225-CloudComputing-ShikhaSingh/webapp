@@ -15,6 +15,7 @@ router.get('/v1/healthz',(req,res)=>{
         message:"/heathz is healthy"
     })
     logger.info("Health check Status Code : 200 , message : Application is healthy")
+    
 
 })
 

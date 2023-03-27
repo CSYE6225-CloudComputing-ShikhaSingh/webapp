@@ -11,6 +11,7 @@ router.use(express.json());
 
 //Authenticated API- get request to retrieve user details
 
+let user_get_request = 0 ;
 router.get('/v1/user/:userId',async(req,res)=>{
 
     logger.info('GET USER API called - finding user process started');
