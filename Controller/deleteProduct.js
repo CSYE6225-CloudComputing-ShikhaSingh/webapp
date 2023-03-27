@@ -20,7 +20,7 @@ const s3= new AWS.S3({
     // accessKeyId: IAM_USER_KEY,
     // secretAccessKey: IAM_USER_SECRET,
     Bucket: process.env.S3_BUCKET_NAME,
-    region: 'us-east-1'
+    region: process.env.AWS_REGION
 })
 router.delete('/v1/product/:productId',async(req,res)=>{
      
