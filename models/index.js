@@ -8,12 +8,13 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
-
+const logger = require('../logger')
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   port: 5432,
   maxConcurrentQueries: 100,
   dialect: 'postgres',
+  logging: (message)=>{ logger.info(message)},
   protocol: 'postgres',
   dialectOptions: {
     ssl: {
@@ -21,7 +22,6 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
         rejectUnauthorized: false
     }
 }
-
 })
 
 

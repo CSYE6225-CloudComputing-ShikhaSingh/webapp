@@ -6,12 +6,16 @@ var bcrypt = require('bcryptjs');
 const AWS= require('aws-sdk');
 const { Validator } = require('node-input-validator');
 const {Image} = require('../models');
+const logger = require('../logger');
+
+var Client = require('node-statsd');
+const client = new Client("localhost", 8125);
+
 router.use(express.json());
 
 // const BUCKET_NAME= "ssthakur-bucket" //process.env.S3_BUCKET_NAME
 //   const IAM_USER_KEY="AKIAW5UOZK2CGLIED3F5"
 //   const IAM_USER_SECRET="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"
-
 const s3= new AWS.S3({
     // accessKeyId: IAM_USER_KEY,
     // secretAccessKey: IAM_USER_SECRET,
@@ -20,12 +24,15 @@ const s3= new AWS.S3({
 })
 router.delete('/v1/product/:productId',async(req,res)=>{
      
-    console.log(req.params.productId);
+    logger.info('Delete Product API called - The process of deleting the product started');
+    client.increment("delete_product_request");
+
     if(!req.headers.authorization || req.headers.authorization.indexOf('Basic')=== -1)
     {
         return res.status(401).json({
             message: 'Unauthorized'
-          })
+          }),
+          logger.error("Product Delete method: Header authorization Error Status : 401 Missing Authorization header in the request");
     
     }
     const base64Credentials = req.headers.authorization.split(' ')[1];
@@ -65,25 +72,33 @@ router.delete('/v1/product/:productId',async(req,res)=>{
                             })
                              
                             product.destroy()
-                            return res.status(200).send("product deleted")
-                            
+                            return res.status(200).send("product deleted"),
+                            logger.info("Product Delete Method : Status code 200 : Product deleted successfully")
                         }
                         else{
-                            return res.status(403).send("Forbidden")
+                            return res.status(403).send("Forbidden"),
+                            logger.error("Product Delete Method : Status code 403 : User is forbidden to delete this product")
+
                         }
                     }
                     else{
                         res.status(404).json("Product not found")
+                        logger.info("Product Delete Method : Status code 403 : Product with id - "+ req.params.productId + " not found" )
+
                     }
                     
                 })
             }
             else{
-                return res.status(403).send("Forbidden")
+                return res.status(403).send("Forbidden"),
+                logger.error("Product Delete Method : Status code 403 : User is forbidden to delete this product")
+
             }
         }
         else{
             res.status(404).json("user name does not exist")
+            logger.error("Product Delete Method : Status code 404 : User " + username + " does not exist")
+
         }
     })
        

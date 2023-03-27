@@ -8,6 +8,10 @@ const {Image} = require('../models')
 const {User} = require('../models')
 const {Product} = require('../models')
 var bcrypt = require('bcryptjs');
+const logger = require('../logger');
+
+var Client = require('node-statsd');
+const client = new Client("localhost", 8125);
 
 const router= express.Router();
 const s3 = new AWS.S3();
@@ -15,12 +19,17 @@ router.use(express.json());
 
 
 router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
+
+    logger.info('Delete Image API called - The process of deleting the images started');
+    client.increment("delete_image_request");
     
     if(!req.headers.authorization || req.headers.authorization.indexOf('Basic')=== -1)
      {
          return res.status(401).json({
              message: 'Unauthorized'
-           })
+           }),
+        logger.error("Image Delete method: Missing Authorization Header - Error Status : 401");
+
      
      }   
      const base64Credentials = req.headers.authorization.split(' ')[1];
@@ -33,9 +42,11 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
             bcrypt.compare(db_password,password,(err,result)=>{
                 if(err)
                 {
-                    res.status(401).json({
+                    return res.status(401).json({
                         message:'Unauthorized'
-                    })
+                    }),
+                    logger.error("Image Delete method: User authorization Error Status : 401" + err.message);
+
                 }
                 else 
                 {
@@ -52,6 +63,9 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
                                  {
                                     let filename= image[0].file_name
                                     console.log(filename)
+                                    const segments = image[0].s3_bucket_path.split('/');
+                                    const secondLastSegment = segments[segments.length - 2];
+
                                     let s3bucket = new AWS.S3({
                                         // accessKeyId: IAM_USER_KEY,
                                         // secretAccessKey: IAM_USER_SECRET,
@@ -59,7 +73,7 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
                                         });
                                         const params = {
                                         Bucket: process.env.S3_BUCKET_NAME,
-                                        Key:   products[0].owner_user_id+'/'+ filename
+                                        Key:   products[0].owner_user_id+'/'+ secondLastSegment + '/' + filename
                                     }    
                                 s3bucket.deleteObject(params).promise();            
                                  Image.destroy(
@@ -71,13 +85,16 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
                                 )
                                 return res.status(204).json({
                                     "message": "Image deleted successfully"
-                                })
+                                }),
+                                logger.info("Image Delete method : Status code : 204 - Deleted the image " + req.params.imageId +" successfully")
                         
                                  }
                                  else{
-                                   res.status(404).json({
+                                   return res.status(404).json({
                                     "message": "Image with this id not found"
-                                     })
+                                     }),
+                                    logger.error("Image Delete method : Status code : 404 : Image with id - " + req.params.imageId + " not found ")
+ 
                                   }
                                })
                             }
@@ -86,6 +103,8 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
                               res.status(500).json({
                                 message: "There was an error deleting the image",
                               });
+                              logger.error("Image Delete method : Status code : 500 : " + err.message)
+
                         
                             }
                          
@@ -93,7 +112,9 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
                     else{
                           res.status(403).json({
                             "message": "forbidden"
-                        })
+                        });
+                        logger.error("Image Delete method : Status code : 403 : User " + username + " is forbidden to make this request ")
+
                      }
                   })
                 }
@@ -102,7 +123,9 @@ router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
         else{
             res.status(404).json({
                 "message": "User name doesn't exist"
-            })
+            });
+            logger.error("Image Delete method : Status code : 404 : User "+ username+ " does not exist ")
+
         }
      })
     

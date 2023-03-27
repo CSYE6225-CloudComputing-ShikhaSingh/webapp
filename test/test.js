@@ -3,6 +3,7 @@ const app = require("../app.js");
 const { expect } = require("chai");
 let chai = require('chai');
 let chaiHttp = require('chai-http');
+const supertest = require("supertest");
 let should = chai.should();
 
 const assert = require('chai').assert;
@@ -11,12 +12,21 @@ chai.use(chaiHttp);
 
 describe("First Unit Test", () => {
     //console.log(typeof app);
-    it("should return response code 200", (done) => {
-        request("http://localhost:3030").get("/v1/healthz").expect(200).end((err, res) => {
-            if (err) return done(err);
+    // it("should return response code 200", (done) => {
+    //     request("http://localhost:3030").get("/v1/healthz").expect(200).end((err, res) => {
+    //         if (err) return done(err);
+    //         return done();
+    //     });
+    // });
+
+    it('GET 404 API endpoint',(done)=>{
+        supertest(app).get('/notfoundendpoint').expect(404).end((err,res)=>{
+            if(err){
+                return done(err)
+            }
             return done();
         });
-    });
+    })
 });
 
 

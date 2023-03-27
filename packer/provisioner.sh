@@ -52,4 +52,3 @@ sudo systemctl start webapp.service
 sudo systemctl enable webapp.service
 pm2 startup systemd
 pm2 restart all --update-env
-

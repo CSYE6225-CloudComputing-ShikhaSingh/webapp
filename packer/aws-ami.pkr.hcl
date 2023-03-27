@@ -77,13 +77,20 @@ build {
   provisioner "file" {
     destination = "/tmp/"
     source      = "${var.GITHUB_PATH}/appDir/webapp.zip"
+    //source = "webapp.zip"
   
 
+  }
+
+  provisioner "file" {
+    destination = "/tmp/"
+    source = "cloudwatch-config.json"
   }
   provisioner "shell" {
     scripts = [
       "./packer/provisioner.sh",
-      "./packer/script.sh"
+      "./packer/script.sh",
+      "./packer/cloudAgentSetUp.sh"
     ]
 
   }
