@@ -120,5 +120,70 @@ terraform destroy
 When prompted to confirm the destruction, enter yes.
 
 
+Assignment - 5:
+
+Prerequisites
+
+AWS account
+AWS CLI installed
+Terraform installed
+IAM user with administrative privileges
+
+
+1. Updated terraform template in main.tf to add the DB security group for the RDS instance
+2. Created a private S3 bucket with a randomly generated bucket name depending on the environment.
+3. Created RDS instance and migrated web application database to implemented as RDS instance
+4. Added new api endpoints to upload, get and delete the images for the products
+
+Assignment - 6 :
+
+Prerequisites
+
+AWS account
+AWS CLI installed
+Terraform installed
+IAM user with administrative privileges
+Namecheap account
+
+1. Register a domain name with a domain registrar such as Namecheap
+2. Created Hosted zone for the domain in the root AWS account
+3. Create a public hosted zone in Amazon Route 53 for the domain yourdomainname.tld.
+4. Created a subdomain & hosted zone for the dev and demo AWS account
+5. Updated terraform template to add type A record in the dev and demo hosted zone
+6. Checked if the application is accessible using root context i.e. http://your-domain-name.tld/
+
+Assignment - 7:
+
+AWS account
+AWS CLI installed
+Terraform installed
+IAM user with administrative privileges
+
+
+1. Updated the Terraform template to Update the IAM role attached to the EC2 instance for use with CloudWatch Agent
+
+CloudWatchAgentServerPolicy: Grants permissions to use the CloudWatch agent to collect metrics and logs.
+
+2. To enable application logging and metrics collection, the following steps should be taken:
+
+a . Updated the Packer template to install the Unified         CloudWatch Agent in the AMIs
+b.  Configured the CloudWatch agent to start automatically     when an EC2 instance is launched using your AMI
+c.  Updated the Terraform template to attach the            CloudWatchAgentServerPolicy to the IAM Role for EC2 instances
+
+Command to Configure CloudWatch Agent (Amazon Linux):
+
+Used the following command to configure the CloudWatch agent on an Amazon Linux instance:
+
+                sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+                -a fetch-config \
+                -m ec2 \
+                -c file:/opt/aws/amazon-cloudwatch-agent/bin/cloudwatch-config.json \
+                -s
+
+
+
+
+
+
 
 
