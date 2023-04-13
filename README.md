@@ -180,6 +180,10 @@ Used the following command to configure the CloudWatch agent on an Amazon Linux 
                 -c file:/opt/aws/amazon-cloudwatch-agent/bin/cloudwatch-config.json \
                 -s
 
+// command to run jmx file for load testing
+
+jmeter -n –t test.jmx -l testresults.jtl
+
 
 
 
