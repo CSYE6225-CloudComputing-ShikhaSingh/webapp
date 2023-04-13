@@ -185,6 +185,28 @@ Used the following command to configure the CloudWatch agent on an Amazon Linux 
 jmeter -n –t test.jmx -l testresults.jtl
 
 
+// command to import the certificate
+
+aws iam upload-server-certificate --server-certificate-name demo_ss-csye6225_me.crt --certificate-body file://*path to your certificate file* --private-key file://*path to your private key file* --certificate-chain file://*path to your CA-bundle file*
+
+
+// to verify the certificate information
+
+aws iam get-server-certificate --server-certificate-name certificate_object_name
+
+openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
+
+// to generate the private key
+openssl rsa -in server.key -outform PEM > server.private.pem
+
+// to convert the certificate in pem format
+openssl x509 -in demo_ss-csye6225_me.crt -out mycert.pem -outform PEM
+
+openssl x509 -in demo_ss-csye6225_me.crt -outform PEM > mycert.pem
+
+openssl x509 -noout -text -in ~/Desktop/yourcertificate.crt  
+
+
 
 
 
