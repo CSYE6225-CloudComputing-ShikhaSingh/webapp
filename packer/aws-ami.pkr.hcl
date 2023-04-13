@@ -63,11 +63,13 @@ source "amazon-ebs" "ec2" {
   launch_block_device_mappings {
     delete_on_termination = true
     device_name           = "/dev/xvda"
-    volume_size           = 8
+    volume_size           = 50
     volume_type           = "gp2"
 
   }
 }
+
+
 
 build {
   sources = [
@@ -95,5 +97,26 @@ build {
 
   }
 
+  provisioner "shell" {
+  inline = [
+    "sudo yum update -y",
+    "sudo yum install -y jq"
+  ]
 }
+
+
+  post-processors {
+  post-processor "manifest"{
+    output      = "manifest.json"
+    strip_path  = true
+
+  }
+
+}
+
+}
+
+
+
+
 
