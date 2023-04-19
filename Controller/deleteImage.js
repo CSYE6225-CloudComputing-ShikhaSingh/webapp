@@ -18,7 +18,7 @@ const s3 = new AWS.S3();
 router.use(express.json());
 
 
-router.delete('/v1/product/:productId/image/:imageId',(req,res)=>{
+router.delete('/v2/product/:productId/image/:imageId',(req,res)=>{
 
     logger.info('Delete Image API called - The process of deleting the images started');
     client.increment("delete_image_request");
