@@ -15,7 +15,7 @@ router.use(express.json());
 
 //Authenticated API- get request to retrieve user details
 
-router.put('/v1/product/:productId',async(req,res)=>{
+router.put('/v2/product/:productId',async(req,res)=>{
 
     logger.info("Update Product process started")
     client.increment("update_product_request");
