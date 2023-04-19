@@ -10,7 +10,7 @@ const client = new Client("localhost", 8125);
 
 router.use(express.json());
 
-router.get('/v1/product/:productId',(req,res)=>{
+router.get('/v2/product/:productId',(req,res)=>{
     
     logger.info('Get Product process started');
     client.increment("get_product_request");
