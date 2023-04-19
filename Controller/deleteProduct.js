@@ -22,7 +22,7 @@ const s3= new AWS.S3({
     Bucket: process.env.S3_BUCKET_NAME,
     region: process.env.AWS_REGION
 })
-router.delete('/v1/product/:productId',async(req,res)=>{
+router.delete('/v2/product/:productId',async(req,res)=>{
      
     logger.info('Delete Product API called - The process of deleting the product started');
     client.increment("delete_product_request");
