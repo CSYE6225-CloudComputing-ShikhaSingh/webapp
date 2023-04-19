@@ -12,7 +12,7 @@ const client = new Client("localhost", 8125);
 
 
 //Unauthenticated Post Rest api to create users
-router.post('/v1/user',async(req,res)=>{
+router.post('/v2/user',async(req,res)=>{
 
     logger.info('POST USER API called - User creation process started');
     
