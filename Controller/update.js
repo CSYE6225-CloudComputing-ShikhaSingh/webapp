@@ -10,7 +10,7 @@ const logger = require('../logger');
 
 router.use(express.json());
 
-router.put('/v1/user/:userId',async(req,res)=>{
+router.put('/v2/user/:userId',async(req,res)=>{
 
     logger.info("Updating the user process started");
     client.increment("update_user_request");
