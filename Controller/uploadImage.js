@@ -62,7 +62,7 @@ const router= express.Router();
 
 var image_post_request = 0;
 
-router.post('/v1/product/:productId/image',upload.array('file',10),(req,res)=>{
+router.post('/v2/product/:productId/image',upload.array('file',10),(req,res)=>{
 
     logger.info(' Upload image for the given product Id process started');
     client.increment("upload_image_request");
