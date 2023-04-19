@@ -12,7 +12,7 @@ const client = new Client("localhost", 8125);
 
 router.use(express.json());
 
-router.post('/v1/product',(req,res)=>{
+router.post('/v2/product',(req,res)=>{
 
      logger.info('POST Product API called - Product creation process started');
 
