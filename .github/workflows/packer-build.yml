@@ -47,11 +47,11 @@ jobs:
           AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
           echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::${{ vars.DEMO_ACCOUNT_ID }}:role/github-role
-          aws-region: "us-east-1"
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     role-to-assume: arn:aws:iam::${{ vars.DEMO_ACCOUNT_ID }}:role/github-role
+      #     aws-region: "us-east-1"
 
 
       - name: Create Launch Template Version
