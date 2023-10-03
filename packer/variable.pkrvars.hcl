@@ -4,6 +4,6 @@ source_ami         = "ami-006dcf34c09e50022"
 ssh_username       = "ec2-user"
 ami_users          = [496745223465]
 //vpc_id             = "vpc-040cc713266174694"
-vpc_id    = "vpc-040cc713266174694"
+vpc_id    = "vpc-09e0b27c0156d9385"
 vpc_region         = "us-east-1"
 launch_permissions = "private"
